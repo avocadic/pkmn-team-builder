@@ -7,9 +7,8 @@ import abilityData from './ability.js';
 let currentSelections = Array.from({ length: 6 }, () => null);
 
 // Dropdown menus
-function populateDropdowns() {
+function populatePKMNDropdowns() {
     const pkmnSelects = document.querySelectorAll('.pkmn');
-    const abilSelects = document.querySelectorAll('.abil');
     const sortedPokemon = Object.values(pokemonData).sort((a, b) => a.base_id - b.base_id);
     pkmnSelects.forEach((select, index) => {
         sortedPokemon.forEach(pokemon => {
@@ -27,6 +26,10 @@ function populateDropdowns() {
             updateTallies();
         });
     });
+}
+
+function populateABILDropdowns() {
+    const abilSelects = document.querySelectorAll('.abil');
     abilSelects.forEach(select => {
         for (const abilityKey in abilityData) {
             const option = document.createElement('option');
@@ -38,6 +41,11 @@ function populateDropdowns() {
             updateTallies(); // Recalculate tallies when an ability is selected
         });
     });
+}
+
+function populateDropdowns(pokemonData, abilityData) {
+    populatePKMNDropdowns(pokemonData);
+    populateABILDropdowns(abilityData);
 }
 
 // Reset button functionality
@@ -110,6 +118,13 @@ function updateTypes(select, pokemonTypes) {
     });
 }
 
+function handleAbility(selectedAbility) {
+    if (selectedAbility === 'Filter') {
+        weak2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 0.5);
+        weak4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 1.5);
+    }
+}
+
 // Updated tallies based on current selections and abilities
 function updateTallies() {
     const tallies = document.querySelectorAll('.tally p');
@@ -126,12 +141,14 @@ function updateTallies() {
             const abilitySelect = document.querySelectorAll('.abil')[index];
             const selectedAbility = abilitySelect.value;
             const abilityModifiers = abilityData[selectedAbility]?.modifiers || {};
+            const abilityFlags = abilityData[selectedAbility]?.flags || '';
             const typeDataMap = typeData[0].type_data;
             let immune2 = new Set();
             let resist2 = new Set();
             let weak2 = new Set();
             let resist4 = new Set();
             let weak4 = new Set();
+            let neutral = new Set();
             // Apply type effects from abilities and type
             if (abilityModifiers.weak2) {
                 abilityModifiers.weak2.forEach(type => weak2.add(type));
@@ -169,12 +186,40 @@ function updateTallies() {
                     weak2.delete(t);
                 }
             });
+            // Determine neutral types (those that are not in immune2, resist2, or weak2)
+            Object.keys(typeDataMap).forEach(type => {
+                if (
+                    !immune2.has(type) &&
+                    !resist2.has(type) &&
+                    !resist4.has(type) &&
+                    !weak4.has(type) &&
+                    !weak2.has(type)
+                ) {
+                    neutral.add(type);
+                }
+            });
             // Accumulate tally values
             immune2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 2);
             resist4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 2);
-            resist2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 1);
-            weak2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 1);
-            weak4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 2);
+            if (abilityFlags.includes('wg')) {
+                resist2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 2);
+                neutral.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 2);
+            } else {
+                resist2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) + 1);
+            }
+            if (abilityFlags.includes('df')) {
+                // Modify weak2 and weak4 values as described when "df" flag is present
+                weak2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 0.5);
+                weak4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 1.5);
+            } else if (abilityFlags.includes('wg')) {
+                // Modify weak2 and weak4 values as described when "wg" flag is present
+                weak2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 2);
+                weak4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 2);
+            } else {
+                // Default behavior (when "df" flag is not present)
+                weak2.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 1);
+                weak4.forEach(t => tallyMap[t] = (tallyMap[t] || 0) - 2);
+            }
         }
     });
     // Update tally boxes
@@ -198,15 +243,15 @@ function updateTallies() {
         weightedScore += weightedValue;
         if (tallyValue >= 3) {
             tally.style.color = '#0C0';
-        } else if (tallyValue === 2) {
+        } else if (tallyValue >= 1.5 && tallyValue < 3) {
             tally.style.color = '#090';
-        } else if (tallyValue === 1) {
+        } else if (tallyValue > 0 && tallyValue < 1.5) {
             tally.style.color = '#060';
         } else if (tallyValue <= -3) {
             tally.style.color = '#C00';
-        } else if (tallyValue === -2) {
+        } else if (tallyValue <= -1.5 && tallyValue > -3) {
             tally.style.color = '#900';
-        } else if (tallyValue === -1) {
+        } else if (tallyValue < 0 && tallyValue > -1.5) {
             tally.style.color = '#600';
         }
     });
@@ -217,7 +262,7 @@ function updateTallies() {
 }
 
 // Function to calculate and log weighted scores for each combination
-function calculateCombinations(excludeUsedTypes = False) {
+function calculateCombinations(excludeUsedTypes = False, reverseTypes = False) {
     const currentTallyMap = getCurrentTallyMap();  // Get current tally state
     const scores = [];
     let usedTypes = new Set();
@@ -297,8 +342,7 @@ function calculateCombinations(excludeUsedTypes = False) {
     });
     // Sort scores from largest to smallest and get the top 10
     scores.sort((a, b) => b.weightedScore - a.weightedScore);
-    const top10Scores = scores.slice(0, 10);
-    // Display top 10 scores in the scoreboxes
+    const top10Scores = reverseTypes ? scores.slice(161, 172).reverse() : scores.slice(0, 10);
     const scoreboxes = document.querySelectorAll('.scorebox');
     top10Scores.forEach((score, index) => {
         if (index < scoreboxes.length) {
@@ -340,8 +384,9 @@ function getCurrentTallyMap() {
 }
 
 // Button call to calculate the next combo
-document.getElementById('combocalc').addEventListener('click', () => calculateCombinations(false));
-document.getElementById('combocalc-ex').addEventListener('click', () => calculateCombinations(true));
+document.getElementById('combocalc').addEventListener('click', () => calculateCombinations(false, false));
+document.getElementById('combocalc-ex').addEventListener('click', () => calculateCombinations(true, false));
+document.getElementById('combocalc-rv').addEventListener('click', () => calculateCombinations(false, true));
 
 // Call the function to populate the dropdowns once the document is loaded
 document.addEventListener('DOMContentLoaded', populateDropdowns);

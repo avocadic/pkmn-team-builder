@@ -16,7 +16,8 @@ export default {
         }
     },
     "filter": {
-        "name": "Filter *"
+        "name": "Filter",
+        "flags": "df"
     },
     "flash_fire": {
         "name": "Flash Fire",
@@ -49,7 +50,8 @@ export default {
         }
     },
     "prism_armor": {
-        "name": "Prism Armor *"
+        "name": "Prism Armor",
+        "flags": "df"
     },
     "purifying_salt": {
         "name": "Purifying Salt",
@@ -64,7 +66,8 @@ export default {
         }
     },
     "solid_rock": {
-        "name": "Solid Rock *"
+        "name": "Solid Rock",
+        "flags": "df"
     },
     "storm_drain": {
         "name": "Storm Drain",
@@ -103,6 +106,7 @@ export default {
         }
     },
     "wonder_guard": {
-        "name": "Wonder Guard *"
+        "name": "Wonder Guard",
+        "flags": "wg"
     }
 };
