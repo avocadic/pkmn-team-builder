@@ -3,200 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémon Team Builder and Teammate Finder</title>
+    <title>Pokémon Defensive Team Builder</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h3 class="header">Pokémon Team Builder and Teammate Finder (Gen 6+)</h3>
-    <div class="container">
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
+    <header class="builder">
+        <div class="builder-head">
+            <h1>Pokémon Defensive Team Builder</h1>
+            <div class="actions">
+                <button id="random" class="action">Randomize</button>
+                <button id="reset" class="action">Clear All</button>
+            </div>
         </div>
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
-        </div>
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
-        </div>
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
-        </div>
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
-        </div>
-        <div class="box">
-            <div class="image-placeholder large"></div>
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <select class="pkmn"></select>
-            <select class="abil"></select>
-        </div>
-    </div>
-    <div class="container">
-        <button id="reset">Clear All</button>
-        <button id="random">Randomize</button>
-    </div>
-    <div class="container">
-        <div class="tally">
-            <img src="img/type/normal.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/fire.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/water.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/electric.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/grass.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/ice.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/fighting.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/poison.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/ground.png">
-            <p class="inline">0</p>
-        </div>
-    </div>
-    <div class="container">
-        <div class="tally">
-            <img src="img/type/flying.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/psychic.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/bug.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/rock.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/ghost.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/dragon.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/dark.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/steel.png">
-            <p class="inline">0</p>
-        </div>
-        <div class="tally">
-            <img src="img/type/fairy.png">
-            <p class="inline">0</p>
-        </div>
-    </div>
-    <div class="container">
-        <div class="score">
-            <p class="inline">Total score: 0</p>
-        </div>
-        <div class="score">
-            <p class="inline">Weighted score: 0</p>
-        </div>
-    </div>
-    <div class="container">
-        <button id="combocalc">Standard Calculation</button>
-        <button id="combocalc-ex">Exclusion Calculation</button>
-        <button id="combocalc-rv">Reverse Calculation</button>
-    </div>
-    <div class="container">
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-        <div class="scorebox">
-            <div class="image-placeholder small"></div>
-            <div class="image-placeholder small"></div>
-            <p class="inline">0</p>
-        </div>
-    </div>
+        <!-- Six team slots are generated by script.js -->
+        <div class="team" id="team"></div>
+    </header>
+
+    <main class="analysis">
+        <section class="effectiveness">
+            <h2>Type Effectiveness</h2>
+            <!-- Eighteen tally cards are generated by script.js -->
+            <div class="tally-grid" id="tallies"></div>
+            <p class="credit">Uses the Gen 6+ type chart. Pokémon and Pokémon character names are trademarks of Nintendo.</p>
+        </section>
+
+        <section class="ideal">
+            <h2>Ideal Team</h2>
+            <div class="ideal-card">
+                <div class="scores">
+                    <p class="score" id="total-score">Total score: 0</p>
+                    <p class="score" id="weighted-score">Weighted score: 0</p>
+                </div>
+                <div class="calc-buttons">
+                    <button id="combocalc" class="calc" data-mode="standard">Standard Calculation</button>
+                    <button id="combocalc-ex" class="calc" data-mode="exclusion">Exclusion Calculation</button>
+                    <button id="combocalc-rv" class="calc" data-mode="reverse">Reverse Calculation</button>
+                </div>
+                <!-- Ten result cards are generated by script.js -->
+                <div class="results" id="results"></div>
+                <p class="results-hint" id="results-hint">Choose a calculation to see the best (or worst) type combos for your next teammate.</p>
+            </div>
+            <div class="pager" id="results-pager" hidden>
+                <span class="page-range" id="page-range"></span>
+                <button class="page-arrow" id="page-prev" aria-label="Previous 10 results">&#9664;</button>
+                <button class="page-arrow" id="page-next" aria-label="Next 10 results">&#9654;</button>
+            </div>
+        </section>
+    </main>
+
     <script src="script.js" type="module"></script>
 </body>
 </html>
